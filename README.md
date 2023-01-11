@@ -4,13 +4,16 @@
 Possible Ideas:
 - Photo filter pretty ez
 - Matrix Decomposition (Did we do this?)
-- Facial Recognition (Eigenvectors Def didn't do this)
+- Facial Recognition or google search algo (Eigenvectors Def didn't do this)
 
-
-
-              (\_/)
-      .-""-.-.-' a\
-     /  \      _.--'
-    (\  /_---\\_\_
-     `'-.
-      ,__)
+         _     __,..---""-._                 ';-,
+        ,    _/_),-"`             '-.                `\\
+       \|.-"`    -_)                 '.                ||
+       /`   a   ,                      \              .'/
+       '.___,__/                 .-'    \_        _.-'.'
+          |\  \      \         /`        _`""""""`_.-'
+             _/;--._, >        |   --.__/ `""""""`
+           (((-'  __//`'-......-;\      )
+                (((-'       __//  '--. /
+                          (((-'    __//
+                                 (((-'
