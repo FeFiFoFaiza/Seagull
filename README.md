@@ -1,10 +1,8 @@
 # Seagull
-## This is mid final project for math class that I am pretedning to do things on rn
+## Photo manipulation using matrix operstions
 
-Possible Ideas:
-- Photo filter pretty ez
-- Matrix Decomposition (Did we do this?)
-- Facial Recognition or google search algo (Eigenvectors Def didn't do this)
+This project uses concepts of elementary matrix operations and matrix multiplication to manipulate images such as rotating and flipping images as well as applying filters.
+
 
                     ___,..---""-._                 ';-,
         ,    _/_),-"`             '-.                `\\
