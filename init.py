@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 # Loads the example seagull image
 exImg = mpimg.imread('seagull.JPG')
 
+exColImg = mpimg.imread('ColorSeagul.JPG')
+
 # Prints out the matrix representation of the picture 
 # where every inner list represents a pixel with its RGB code
 #print(exImg)
@@ -20,25 +22,6 @@ print("The dimensions of this image is: " + str(m) + " by " + str(n))
 
 # Cropping the image 
 ImJPG_center = exImg[100:m-100, 100:n-100]
-
-# # Creating a function that will transpose matrices
-# def transpose(matrix):
-#     cols = len(matrix)
-#     rows = len(matrix[0])
-
-#     newMatrix = [[0 for i in range(cols)] for j in range(rows)]
-
-#     for i in range (rows):
-#         for j in range (cols):
-#             newMatrix[j][i] = 0
-#             for i in range(len(x)):
-#                 #Iterate through columns
-#                 for j in range(len(x[0])):
-#                     result[j][i] = x[i][j]
-#                     for r in Result
-#                     print(r)
-#     #return newMatrix
-#     return rows
     
 # Rotates and flips
 def transpose(matrix):
@@ -53,6 +36,7 @@ def transpose(matrix):
     return newMatrix
 
 # Reflects over the y-axis
+# By reversing the order of elements in each row
 def vertFlip(matrix):
     return [ row[::-1] for row in matrix ]
 
@@ -64,7 +48,19 @@ def rotate90CW(matrix):
 def rotate90CCW(matrix):
     return transpose(vertFlip(matrix))
 
-plt.imshow(rotate90CCW(exImg))
+# Reflects over the x-axis
+# By rotating after transposing
+def horFlip(matrix):
+    return rotate90CCW(transpose(matrix))
+
+def darken(matrix):
+    return (matrix - 50)
+
+def contrast(matrix):
+    return (50 - matrix)
+
+
+plt.imshow(contrast(exImg))
 plt.show()
 
 #print(transpose([[2,3,4],[5,2,3]]))
