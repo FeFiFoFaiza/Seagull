@@ -2,14 +2,16 @@ import matplotlib as mp
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 
-# Loads the example seagull image
+# Loads the example seagull image (black and white)
 exImg = mpimg.imread('seagull.JPG')
 
+# Loads the example seagull image (color)
 exColImg = mpimg.imread('ColorSeagul.JPG')
 
 # Prints out the matrix representation of the picture 
 # where every inner list represents a pixel with its RGB code
-#print(exImg)
+print(exColImg)
+print(exColImg.shape)
 
 # Image is graphed using pyplot
 #exPlot = plt.imshow(exImg)
@@ -59,8 +61,109 @@ def darken(matrix):
 def contrast(matrix):
     return (50 - matrix)
 
+# Returns the dimensions of the numpy array
+def matrix_dimensions(matrix):
+    num_rows = len(matrix)
+    num_cols = len(matrix[0])
+    return ((num_rows, num_cols))
 
-plt.imshow(contrast(exImg))
+# Challenge 2
+# Write a function that determines if two matrices can be multiplied
+
+
+# Returns True or False
+def can_multiply_matrices(A, B):
+  if (len(A[0]) == len(B)):
+    return True
+  else:
+    return False
+
+
+# Challenge 3
+# Write a function that determines the entry in row i, column j of the matrix product A*B
+
+# Returns the entry in row i, column j of the matrix product A*B
+
+
+def matrix_product_entry(A, B, i, j):
+
+  # Should probably check first to see if the matrices can be multiplied!
+  if (can_multiply_matrices(A, B)):
+    sum = 0
+    for w in range(len(B)):
+      sum += B[w][j] * A[i][w] 
+    return (sum)
+  return "Nah Bro you cant"
+
+
+# Challenge 4
+# Write a function that multiplies two matrices A and B
+
+# Returns the matrix product
+
+
+def matrix_product(A, B):
+
+  # Should probably check first to see if the matrices can be multiplied!
+  if (can_multiply_matrices(A, B)):
+    rows = len(A[0])
+    columns = len(B)
+    pickle = []
+
+    # Initialize a new empty list for your row lists
+    P = []
+
+    for r in range(rows):
+      for c in range(columns):
+        pickle.append(matrix_product_entry(A, B, r, c))
+      P.append(pickle)
+      pickle = []
+
+    return P
+
+  else:
+    return "boo"
+
+
+
+
+# Extract the RGB of each pixel
+# Treat it as a matrix and matrix multiply
+# Produces a 1x3 matrix 
+# Turn that back into RGB code and store it into numpy
+
+def photoEditor(imgMatrix, filterMatrix):
+    for i in range(len(imgMatrix)):
+        for j in range(len(imgMatrix[0])):
+            
+            #Extract the RGB code and put it into a matrix
+            RGBCode = imgMatrix[i][j]
+
+            RGBMatrix = []
+            for m in RGBCode:
+                placeholderMatrix = []
+                placeholderMatrix.append(m)
+                RGBMatrix.append(placeholderMatrix)
+
+            print(RGBMatrix)
+
+            print(matrix_dimensions(RGBMatrix))
+
+            #Matrix multiply with the filter matrix
+            RGBMatrix = matrix_product(filterMatrix, RGBMatrix)
+
+            #Turn back into a new RGB Code
+            print(RGBMatrix)
+
+    return True
+
+
+greyMatrix = [[1/3, 1/3, 1/3], [1/3, 1/3, 1/3], [1/3, 1/3, 1/3]]
+photoEditor(exColImg, greyMatrix)
+
+
+
+plt.imshow(transpose(exImg))
 plt.show()
 
 #print(transpose([[2,3,4],[5,2,3]]))
