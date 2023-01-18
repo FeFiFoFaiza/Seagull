@@ -159,7 +159,7 @@ def photoEditor(imgMatrix, filterMatrix):
 
 
 greyMatrix = [[1/3, 1/3, 1/3], [1/3, 1/3, 1/3], [1/3, 1/3, 1/3]]
-photoEditor(exColImg, greyMatrix)
+#photoEditor(exColImg, greyMatrix)
 
 
 
