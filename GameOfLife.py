@@ -1,19 +1,24 @@
 import time
 import pygame
 import numpy as np
+import random
 
+#Establishing Colors
 Color_Background= (10, 10, 10)
 Color_Grid = (40,40,40)
 Color_Next_Die = (170, 170, 170)
 Color_Next_Alive = (255, 255, 255)
 
+#Defining update to allow for animation of the game
 def update (screen, cells, size, with_progress=False):
     updated_cells = np.zeros((cells.shape[0], cells.shape[1]))
 
     for row, col in np.ndindex(cells.shape):
+        #Calculating the dot product of the pixel and the matrix of pixels around it
         alive = np.sum(cells[row -1: row +2,col -1: col +2]) - cells[row][col]
         color = Color_Background if cells [row, col] == 0 else Color_Next_Alive
 
+        #rules outlining the Game of Life
         if cells[row, col] == 1:
             if alive < 2 or alive > 3:
                 if with_progress:
@@ -41,19 +46,27 @@ def main():
     update(screen, cells, 10)
     pygame.display.flip()
     pygame.display.update()
-
+    # Makes about 1/4 of the values blocks
+    for row, col in np.ndindex(cells.shape):
+        temp = random.uniform(0, 1)
+        if (temp < 0.25):
+            cells[row, col] = 1
     running = False
 
     while True:
+        #Game Controls
         for event in pygame.event.get():
+        #Quit Command
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
+            #Space starts and stops the program
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     running = not running
                     update(screen, cells, 10)
                     pygame.display.update()
+            #Mouse adds values
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 cells[pos[1] // 10, pos[0] // 10] = 1
