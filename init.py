@@ -2,6 +2,7 @@ import matplotlib as mp
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
+import array
 
 # Loads the example seagull image (black and white)
 exImg = mpimg.imread('seagull.JPG')
@@ -21,6 +22,9 @@ print(exColImg.shape)
 # Storing the dimensions (m x n) of the image
 m = exImg.shape[1]
 n = exImg.shape[0]
+
+mColor = exColImg.shape[1]
+nColor = exColImg.shape[0]
 print("The dimensions of this image is: " + str(m) + " by " + str(n))
 
 # Cropping the image
@@ -104,7 +108,7 @@ def matrix_product_entry(A,B,i,j):
   for k in range(matrix_dimensions(A)[1]):
     # Computing dot product of row i from matrix A with row j of matrix B
     # Subtracting 1 from i and j because Python's lists are 0-indexed
-    entry += A[i-1][k]*B[k][j-1]
+    entry += int(A[i-1][k]*B[k][j-1])
   return entry
 
 
@@ -158,40 +162,73 @@ def matrix_product(A,B):
 # Produces a 1x3 matrix
 # Turn that back into RGB code and store it into numpy
 
+# def photoEditor(imgMatrix, filterMatrix):
+#     for i in range(len(imgMatrix)):
+#         for j in range(len(imgMatrix[0])):
+
+#             #Extract the RGB code and put it into a matrix
+#             RGBCode = imgMatrix[i][j]
+
+#             RGBMatrix = []
+#             for m in RGBCode:
+#                 placeholderMatrix = []
+#                 placeholderMatrix.append(m)
+#                 RGBMatrix.append(placeholderMatrix)
+
+#             #print(np.uint8(RGBMatrix))
+
+#             #print(matrix_dimensions(RGBMatrix))
+
+#             #Matrix multiply with the filter matrix
+#             RGBMatrix = matrix_product(filterMatrix, RGBMatrix)
+
+
+#             #Turn back into a new RGB Code
+#             newRGBCode = []
+#             for i in range(3):
+#               newRGBCode.append(RGBMatrix[i][0])
+#             #print(newRGBCode)
+#             #imgMatrix = imgMatrix.copy()
+#             imgMatrix[i, j] = newRGBCode
+#     return imgMatrix
+
 def photoEditor(imgMatrix, filterMatrix):
-    for i in range(len(imgMatrix)):
-        for j in range(len(imgMatrix[0])):
+  # Find a way to matrix multiply and convert into numpy.ndarray
+  output = []
+  for i in range(len(imgMatrix)):
+    row = []
+    for j in range(len(imgMatrix[0])):
 
-            #Extract the RGB code and put it into a matrix
-            RGBCode = imgMatrix[i][j]
+      #Extract original RGB code
+      RGBCode = imgMatrix[i][j]
 
-            RGBMatrix = []
-            for m in RGBCode:
-                placeholderMatrix = []
-                placeholderMatrix.append(m)
-                RGBMatrix.append(placeholderMatrix)
+      #Turn into a matrix
+      RGBMatrix = []
+      for m in RGBCode:
+        placeholderMatrix = []
+        placeholderMatrix.append(m)
+        RGBMatrix.append(placeholderMatrix)
 
-            #print(np.uint8(RGBMatrix))
+      r = np.array(matrix_product(filterMatrix, RGBMatrix)).flatten()
+      row.append(r)
+      #print(r)
+      #print(array.array('d',RGBCode))
+    output.append(row)
 
-            #print(matrix_dimensions(RGBMatrix))
-
-            #Matrix multiply with the filter matrix
-            RGBMatrix = matrix_product(filterMatrix, RGBMatrix)
+  return np.array(output)
 
 
-            #Turn back into a new RGB Code
-            newRGBCode = []
-            for i in range(3):
-              newRGBCode.append(RGBMatrix[i][0])
-            #print(newRGBCode)
-            imgMatrix = imgMatrix.copy()
-            imgMatrix[i][j] = newRGBCode
-    return imgMatrix
+  # output = np.matmul(exColImg, greyMatrix)
+  # print ((output))
+  # return output.reshape(exColImg.shape).astype(exColImg.dtype)
 
 
 greyMatrix = [[1/3, 1/3, 1/3], [1/3, 1/3, 1/3], [1/3, 1/3, 1/3]]
-plt.imshow(photoEditor(exColImg, greyMatrix))
+redMatrix = [[1, 0, 0], [0, 0, 0], [0, 0, 0]]
+#plt.imshow([[[255, 255, 255], [0, 0, 0]]])
+plt.imshow(photoEditor(exColImg, redMatrix))
 plt.show()
+
 
 #print(transpose([[2,3,4],[5,2,3]]))
 
