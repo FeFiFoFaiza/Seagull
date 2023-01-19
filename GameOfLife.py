@@ -25,8 +25,8 @@ def update (screen, cells, size, with_progress=False):
         else:
             if alive == 3:
                 updated_cells[row, col] = 1
-            if with_progress:
-                color = Color_Next_Alive
+                if with_progress:
+                    color = Color_Next_Alive
 
         pygame.draw.rect(screen, color, (col * size, row * size, size -1, size -1))
 
@@ -52,7 +52,6 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     running = not running
-                    screen.fill(Color_Grid)
                     update(screen, cells, 10)
                     pygame.display.update()
             if pygame.mouse.get_pressed()[0]:
