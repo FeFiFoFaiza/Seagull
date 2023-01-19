@@ -1,6 +1,7 @@
 import matplotlib as mp
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Loads the example seagull image (black and white)
 exImg = mpimg.imread('seagull.JPG')
@@ -85,15 +86,26 @@ def can_multiply_matrices(A, B):
 # Returns the entry in row i, column j of the matrix product A*B
 
 
-def matrix_product_entry(A, B, i, j):
+# def matrix_product_entry(A, B, i, j):
 
-  # Should probably check first to see if the matrices can be multiplied!
-  if (can_multiply_matrices(A, B)):
-    sum = 0
-    for w in range(len(B)):
-      sum += B[w][j] * A[i][w] 
-    return (sum)
-  return "Nah Bro you cant"
+#   # Should probably check first to see if the matrices can be multiplied!
+#   if (can_multiply_matrices(A, B)):
+#     sum = 0
+#     for w in range(len(B)):
+#       sum += B[w][j] * A[i][w] 
+#     return (sum)
+#   return "Nah Bro you cant"
+
+def matrix_product_entry(A,B,i,j):
+  # First check to see if matrices can be mutliplied
+  if(not(can_multiply_matrices(A,B))): return False
+
+  entry = 0
+  for k in range(matrix_dimensions(A)[1]):
+    # Computing dot product of row i from matrix A with row j of matrix B
+    # Subtracting 1 from i and j because Python's lists are 0-indexed
+    entry += A[i-1][k]*B[k][j-1]
+  return entry
 
 
 # Challenge 4
@@ -102,27 +114,41 @@ def matrix_product_entry(A, B, i, j):
 # Returns the matrix product
 
 
-def matrix_product(A, B):
+# def matrix_product(A, B):
 
-  # Should probably check first to see if the matrices can be multiplied!
-  if (can_multiply_matrices(A, B)):
-    rows = len(A[0])
-    columns = len(B)
-    pickle = []
+#   # Should probably check first to see if the matrices can be multiplied!
+#   if (can_multiply_matrices(A, B)):
+#     rows = len(A[0])
+#     columns = len(B)
+#     pickle = []
 
-    # Initialize a new empty list for your row lists
-    P = []
+#     # Initialize a new empty list for your row lists
+#     P = []
 
-    for r in range(rows):
-      for c in range(columns):
-        pickle.append(matrix_product_entry(A, B, r, c))
-      P.append(pickle)
-      pickle = []
+#     for r in range(rows):
+#       for c in range(columns):
+#         pickle.append(matrix_product_entry(A, B, r, c))
+#       P.append(pickle)
+#       pickle = []
 
-    return P
+#     return P
 
-  else:
-    return "boo"
+#   else:
+#     return "boo"
+
+def matrix_product(A,B):
+  # First check to see if matrices can be multiplied
+  if(not(can_multiply_matrices(A,B))): return False
+
+  P = []
+  for i in range(matrix_dimensions(A)[0]):
+    R = []
+    #print("i" + str(i))
+    for j in range(matrix_dimensions(B)[1]):
+      # Adding 1 to i and j because matrix_product_entry expects 1-indexed rows and columns!
+      R.append(matrix_product_entry(A,B,i+1,j+1))
+    P.append(R)
+  return P
 
 
 
@@ -145,25 +171,26 @@ def photoEditor(imgMatrix, filterMatrix):
                 placeholderMatrix.append(m)
                 RGBMatrix.append(placeholderMatrix)
 
-            print(RGBMatrix)
+            #print(np.uint8(RGBMatrix))
 
-            print(matrix_dimensions(RGBMatrix))
+            #print(matrix_dimensions(RGBMatrix))
 
             #Matrix multiply with the filter matrix
             RGBMatrix = matrix_product(filterMatrix, RGBMatrix)
+            
 
             #Turn back into a new RGB Code
-            print(RGBMatrix)
-
-    return True
+            newRGBCode = []
+            for i in range(3):
+              newRGBCode.append(RGBMatrix[i][0])
+            #print(newRGBCode)
+            imgMatrix = imgMatrix.copy()
+            imgMatrix[i][j] = newRGBCode
+    return imgMatrix
 
 
 greyMatrix = [[1/3, 1/3, 1/3], [1/3, 1/3, 1/3], [1/3, 1/3, 1/3]]
-#photoEditor(exColImg, greyMatrix)
-
-
-
-plt.imshow(transpose(exImg))
+plt.imshow(photoEditor(exColImg, greyMatrix))
 plt.show()
 
 #print(transpose([[2,3,4],[5,2,3]]))
