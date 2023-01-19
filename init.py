@@ -48,6 +48,7 @@ def createCustomMatrixRow(row):
 # Cropping the image
 def crop(x1, x2, y1, y2):
   croppedImg = matrixChoice[x1:x2, y1:y2]
+  print("")
   return croppedImg
 
 # Rotates and flips
@@ -85,7 +86,7 @@ def horFlip(matrix):
 def inverse(matrix):
     return (255 - matrix)
 
-# Returns the dimensions of the numpy array
+# Returns the dimensions of the array
 def matrix_dimensions(matrix):
     num_rows = len(matrix)
     num_cols = len(matrix[0])
@@ -99,35 +100,36 @@ def can_multiply_matrices(A, B):
     return False
 
 def matrix_product_entry(A,B,i,j):
-  # First check to see if matrices can be mutliplied
-  if(not(can_multiply_matrices(A,B))): return False
 
-  entry = 0
-  for k in range(matrix_dimensions(A)[1]):
-    # Computing dot product of row i from matrix A with row j of matrix B
-    # Subtracting 1 from i and j because Python's lists are 0-indexed
-    entry += int(A[i-1][k]*B[k][j-1])
-  return entry
+  # check if matrices can be mutliplied
+  if(can_multiply_matrices(A,B)):
+    entry = 0
+    for k in range(len(A[1])):
+      # Compute dot product
+      entry += int(A[i][k]*B[k][j])
+    return entry
+  else:
+    return False
 
 def matrix_product(A,B):
-  # First check to see if matrices can be multiplied
-  if(not(can_multiply_matrices(A,B))): return False
+  # check if matrices can be mutliplied
+  if(can_multiply_matrices(A,B)):
+    P = []
+    for i in range(matrix_dimensions(A)[0]):
+      Q = []
+      for j in range(matrix_dimensions(B)[1]):
+        # Use matrix multiply helper function
+        Q.append(matrix_product_entry(A,B,i,j))
+      P.append(Q)
+    return P
+  else:
+    return False
 
-  P = []
-  for i in range(matrix_dimensions(A)[0]):
-    R = []
-    #print("i" + str(i))
-    for j in range(matrix_dimensions(B)[1]):
-      # Adding 1 to i and j because matrix_product_entry expects 1-indexed rows and columns!
-      R.append(matrix_product_entry(A,B,i+1,j+1))
-    P.append(R)
-  return P
 
 # Extract the RGB of each pixel
 # Treat it as a matrix and matrix multiply
 # Produces a 1x3 matrix
 # Turn that back into RGB code and store it into numpy
-
 def photoEditor(imgMatrix, filterMatrix):
   # Find a way to matrix multiply and convert into numpy.ndarray
   output = []
@@ -153,7 +155,7 @@ def photoEditor(imgMatrix, filterMatrix):
 
   return np.array(output)
 
-
+# PreBuilt Matrices
 greyMatrix = [[1/3, 1/3, 1/3], [1/3, 1/3, 1/3], [1/3, 1/3, 1/3]]
 redMatrix = [[1, 0, 0], [0, 0, 0], [0, 0, 0]]
 blueMatrix = [[0, 0, 0], [0, 0, 0], [1, 0, 0]]
@@ -250,7 +252,6 @@ while (True):
       6. Green-scale
       7. User
       8. Permute
-      9. Custom
       Your choice: """)
 
       try:
@@ -270,23 +271,6 @@ while (True):
           matrixChoice = photoEditor(matrixChoice, userMatrix)
         elif int(filterChoice) == 8:
           matrixChoice = photoEditor(matrixChoice, permutedMatrix)
-        elif int(filterChoice) == 9:
-          
-          customMatrix = []
-
-          customRow = input("""
-          Please enter the first row [separated by space]: 
-          ex.   [1, 2, 3] -> 1,2,3\n        """)
-          createCustomMatrixRow(customRow)
-          customMatrix.append(globalCustomRow)
-          customRow = input("And now the second: \n        ")
-          createCustomMatrixRow(customRow)
-          customMatrix.append(globalCustomRow)
-          customRow = input("The third? \n        ")
-          createCustomMatrixRow(customRow)
-          customMatrix.append(globalCustomRow)
-
-          matrixChoice = photoEditor(matrixChoice, customMatrix)
         else:
           print("""
           There were nine options....How do you mess that up?
