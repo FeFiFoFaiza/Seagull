@@ -44,6 +44,9 @@ def transpose(matrix):
 
 # Reflects over the y-axis
 # By reversing the order of elements in each row
+# Note: Traditionally, you can multiply the matrix with a inversed version of the identity matrix
+#       However, this will not work in this process as you cannot arithmetically multiply a list (the RGB codes) with numbers
+
 def vertFlip(matrix):
     return [ row[::-1] for row in matrix ]
 
@@ -72,33 +75,12 @@ def matrix_dimensions(matrix):
     num_cols = len(matrix[0])
     return ((num_rows, num_cols))
 
-# Challenge 2
-# Write a function that determines if two matrices can be multiplied
-
-
 # Returns True or False
 def can_multiply_matrices(A, B):
   if (len(A[0]) == len(B)):
     return True
   else:
     return False
-
-
-# Challenge 3
-# Write a function that determines the entry in row i, column j of the matrix product A*B
-
-# Returns the entry in row i, column j of the matrix product A*B
-
-
-# def matrix_product_entry(A, B, i, j):
-
-#   # Should probably check first to see if the matrices can be multiplied!
-#   if (can_multiply_matrices(A, B)):
-#     sum = 0
-#     for w in range(len(B)):
-#       sum += B[w][j] * A[i][w] 
-#     return (sum)
-#   return "Nah Bro you cant"
 
 def matrix_product_entry(A,B,i,j):
   # First check to see if matrices can be mutliplied
@@ -110,35 +92,6 @@ def matrix_product_entry(A,B,i,j):
     # Subtracting 1 from i and j because Python's lists are 0-indexed
     entry += int(A[i-1][k]*B[k][j-1])
   return entry
-
-
-# Challenge 4
-# Write a function that multiplies two matrices A and B
-
-# Returns the matrix product
-
-
-# def matrix_product(A, B):
-
-#   # Should probably check first to see if the matrices can be multiplied!
-#   if (can_multiply_matrices(A, B)):
-#     rows = len(A[0])
-#     columns = len(B)
-#     pickle = []
-
-#     # Initialize a new empty list for your row lists
-#     P = []
-
-#     for r in range(rows):
-#       for c in range(columns):
-#         pickle.append(matrix_product_entry(A, B, r, c))
-#       P.append(pickle)
-#       pickle = []
-
-#     return P
-
-#   else:
-#     return "boo"
 
 def matrix_product(A,B):
   # First check to see if matrices can be multiplied
@@ -154,43 +107,10 @@ def matrix_product(A,B):
     P.append(R)
   return P
 
-
-
-
 # Extract the RGB of each pixel
 # Treat it as a matrix and matrix multiply
 # Produces a 1x3 matrix 
 # Turn that back into RGB code and store it into numpy
-
-# def photoEditor(imgMatrix, filterMatrix):
-#     for i in range(len(imgMatrix)):
-#         for j in range(len(imgMatrix[0])):
-            
-#             #Extract the RGB code and put it into a matrix
-#             RGBCode = imgMatrix[i][j]
-
-#             RGBMatrix = []
-#             for m in RGBCode:
-#                 placeholderMatrix = []
-#                 placeholderMatrix.append(m)
-#                 RGBMatrix.append(placeholderMatrix)
-
-#             #print(np.uint8(RGBMatrix))
-
-#             #print(matrix_dimensions(RGBMatrix))
-
-#             #Matrix multiply with the filter matrix
-#             RGBMatrix = matrix_product(filterMatrix, RGBMatrix)
-            
-
-#             #Turn back into a new RGB Code
-#             newRGBCode = []
-#             for i in range(3):
-#               newRGBCode.append(RGBMatrix[i][0])
-#             #print(newRGBCode)
-#             #imgMatrix = imgMatrix.copy()
-#             imgMatrix[i, j] = newRGBCode
-#     return imgMatrix
 
 def photoEditor(imgMatrix, filterMatrix):
   # Find a way to matrix multiply and convert into numpy.ndarray
@@ -217,10 +137,17 @@ def photoEditor(imgMatrix, filterMatrix):
 
   return np.array(output)
 
-       
-  # output = np.matmul(exColImg, greyMatrix)
-  # print ((output))
-  # return output.reshape(exColImg.shape).astype(exColImg.dtype)
+
+
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Inputting stuff
+
+input("""
+      Seagull PhotoEditor \n
+      Choose a photo to edit \n
+      1. 
+      """)
 
 
 greyMatrix = [[1/3, 1/3, 1/3], [1/3, 1/3, 1/3], [1/3, 1/3, 1/3]]
