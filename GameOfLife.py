@@ -37,6 +37,7 @@ def update (screen, cells, size, with_progress=False):
 
     return updated_cells
 
+
 def main():
     pygame.init()
     screen = pygame.display.set_mode((800,600))
@@ -64,6 +65,14 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     running = not running
+                    update(screen, cells, 10)
+                    pygame.display.update()
+                elif event.key == pygame.K_r:
+                    for row, col in np.ndindex(cells.shape):
+                        temp = random.uniform(0, 1)
+                        if (temp < 0.25):
+                            cells[row, col] = 1
+                        running = False
                     update(screen, cells, 10)
                     pygame.display.update()
             #Mouse adds values
