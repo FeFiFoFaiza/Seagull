@@ -10,7 +10,7 @@ exImg = mpimg.imread('seagull.JPG')
 # Loads the example seagull image (color)
 exColImg = mpimg.imread('ColorSeagul.JPG')
 
-# Prints out the matrix representation of the picture 
+# Prints out the matrix representation of the picture
 # where every inner list represents a pixel with its RGB code
 print(exColImg)
 print(exColImg.shape)
@@ -27,9 +27,9 @@ mColor = exColImg.shape[1]
 nColor = exColImg.shape[0]
 print("The dimensions of this image is: " + str(m) + " by " + str(n))
 
-# Cropping the image 
+# Cropping the image
 ImJPG_center = exImg[100:m-100, 100:n-100]
-    
+
 # Rotates and flips
 def transpose(matrix):
     rows = len(matrix)
@@ -109,7 +109,7 @@ def matrix_product(A,B):
 
 # Extract the RGB of each pixel
 # Treat it as a matrix and matrix multiply
-# Produces a 1x3 matrix 
+# Produces a 1x3 matrix
 # Turn that back into RGB code and store it into numpy
 
 def photoEditor(imgMatrix, filterMatrix):

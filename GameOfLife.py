@@ -1,24 +1,73 @@
-from scipy.ndimage import convolve
-from matplotlib import pyplot
+import time
+import pygame
 import numpy as np
-game_board = np.zeros((7,7),np.int8)
-game_board[:3,:3] = [[0,1,0],[0,0,1],[1,1,1]]
-pyplot.imshow(game_board,cmap="binary")
 
-neighbor_kernel = np.ones((3,3))
-neighbor_kernel[1,1] = 0
+Color_Background= (10, 10, 10)
+Color_Grid = (40,40,40)
+Color_Next_Die = (170, 170, 170)
+Color_Next_Alive = (255, 255, 255)
 
-def life_step(game_board):
-    neighbor_sums = convolve(game_board,neighbor_kernel,mode="wrap")
+def update (screen, cells, size, with_progress=False):
+    updated_cells = np.zeros((cells.shape[0], cells.shape[1]))
 
-    # If fewer than 2 neighbors, cell is dead.
-    game_board[neighbor_sums < 2] = 0
-    # If 2 neighbors, cell stays in its state.
-    # If 3 neighbors, cell becomes or stays active.
-    game_board[neighbor_sums == 3] = 1
-    # If >3 neighbors, cell dies
-    game_board[neighbor_sums > 3] = 0
+    for row, col in np.ndindex(cells.shape):
+        alive = np.sum(cells[row -1: row +2,col -1: col +2]) - cells[row][col]
+        color = Color_Background if cells [row, col] == 0 else Color_Next_Alive
 
-life_step(game_board)
-pyplot.imshow(game_board,cmap="binary")
-pyplot.show()
+        if cells[row, col] == 1:
+            if alive < 2 or alive > 3:
+                if with_progress:
+                    color = Color_Next_Die
+            elif 2 <= alive <= 3:
+                updated_cells[row, col] = 1
+                if with_progress:
+                    color = Color_Next_Alive
+        else:
+            if alive == 3:
+                updated_cells[row, col] = 1
+            if with_progress:
+                color = Color_Next_Alive
+
+        pygame.draw.rect(screen, color, (col * size, row * size, size -1, size -1))
+
+    return updated_cells
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((800,600))
+
+    cells = np.zeros ((60, 80))
+    screen.fill(Color_Grid)
+    update(screen, cells, 10)
+    pygame.display.flip()
+    pygame.display.update()
+
+    running = False
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    running = not running
+                    screen.fill(Color_Grid)
+                    update(screen, cells, 10)
+                    pygame.display.update()
+            if pygame.mouse.get_pressed()[0]:
+                pos = pygame.mouse.get_pos()
+                cells[pos[1] // 10, pos[0] // 10] = 1
+                update (screen, cells, 10)
+                pygame.display.update()
+
+        screen.fill(Color_Grid)
+
+        if running:
+            cells = update(screen, cells, 10, with_progress=True)
+            pygame.display.update()
+
+        time.sleep(0.001)
+
+if __name__ == '__main__':
+    main()
